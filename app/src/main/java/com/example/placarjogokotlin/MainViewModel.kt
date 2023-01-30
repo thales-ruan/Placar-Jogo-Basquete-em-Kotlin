@@ -49,4 +49,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application){
       mValorVisitante.value = mValorVisitante.value?.minus(1)
     }
   }
+
+  fun reset(){
+    mValorLocal.value = 0
+    mValorVisitante.value = 0
+  }
 }

@@ -1,5 +1,6 @@
 package com.example.placarjogokotlin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -9,7 +10,7 @@ import com.example.placarjogokotlin.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,30 +21,31 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-//        binding.localPlusButton.setOnClickListener {
-//            viewModel.incremetaUmLocal()
-//        }
-
         botoes()
 
+        observes()
+
+        binding.resultsButton.setOnClickListener {
+            val intent = Intent(applicationContext, ActivityFinal::class.java)
+
+            intent.putExtra(ActivityFinal.LOCAL_KEY, viewModel.valorLocal.value)
+            intent.putExtra(ActivityFinal.VISITANTE_KEY, viewModel.valorVisitante.value)
+            startActivity(intent)
+
+        }
+    }
+
+    private fun observes() {
         viewModel.valorLocal.observe(this, Observer {
-
             binding.localScoreText.text = it.toString()
-
         })
 
         viewModel.valorVisitante.observe(this, Observer {
-
             binding.visitorScoreText.text = it.toString()
-
         })
-
-
-
-
     }
-    fun botoes(){
+
+    fun botoes() {
         binding.localPlusButton.setOnClickListener {
             viewModel.incremetaUmLocal()
         }
@@ -66,6 +68,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.visitorMinusButton.setOnClickListener {
             viewModel.decrementaVisitante()
+        }
+
+        binding.restartButton.setOnClickListener {
+            viewModel.reset()
         }
     }
 }
